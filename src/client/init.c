@@ -45,6 +45,8 @@ static oeso_socket_t get_fd(const char *ip, int port) {
 
 int oeso_client_init(oeso_clt_ctx_t *ctx, const char *ip, int port) {
 	oeso_socket_t fd = get_fd(ip, port);
+	if (fd == INVALID_SOCKET)
+		return 1;
 	ctx->fd = fd;
 	return 0;
 }
