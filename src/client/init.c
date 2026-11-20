@@ -35,7 +35,7 @@ static ra_socket_t get_fd(const char *ip, int port, uint8_t flags) {
 		}
 		if (is_fine || ret == 0) {
 			freeaddrinfo(info);
-			if (flags & OESO_FLAG_NODELAY) {
+			if (flags & RA_FLAG_NODELAY) {
 				int flag = 1;
 				setsockopt(res, IPPROTO_TCP, TCP_NODELAY, (void *)&flag, sizeof(flag));
 			}
@@ -48,7 +48,7 @@ static ra_socket_t get_fd(const char *ip, int port, uint8_t flags) {
 }
 
 int ra_client_init(ra_clt_ctx_t *ctx, const char *ip, int port, uint8_t flags) {
-	ra_socket_t fd = get_fd(ip, port);
+	ra_socket_t fd = get_fd(ip, port, flags);
 	if (fd == INVALID_SOCKET)
 		return 1;
 	ctx->fd = fd;

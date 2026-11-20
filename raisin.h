@@ -62,6 +62,7 @@ struct ra_srv_ctx_t {
 	size_t clients_capacity;
 
 	void *data;
+	uint8_t flags;
 };
 
 // server side
