@@ -36,7 +36,7 @@
 typedef struct ra_srv_clt_t ra_srv_clt_t;
 typedef struct ra_srv_ctx_t ra_srv_ctx_t;
 
-#define OESO_FLAG_NODELAY (1 << 0)
+#define RA_FLAG_NODELAY (1 << 0)
 
 struct ra_srv_clt_t {
 	ra_socket_t fd;
