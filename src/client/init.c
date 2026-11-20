@@ -3,7 +3,7 @@
 #include <arpa/inet.h>
 #endif
 
-static oeso_socket_t get_fd(const char *ip, int port) {
+static oeso_socket_t get_fd(const char *ip, int port, uint8_t flags) {
 	oeso_socket_t res = INVALID_SOCKET;
 	struct addrinfo hints = {0};
 	struct addrinfo *info = {0};
@@ -35,6 +35,10 @@ static oeso_socket_t get_fd(const char *ip, int port) {
 		}
 		if (is_fine || ret == 0) {
 			freeaddrinfo(info);
+			if (flags & OESO_FLAG_NODELAY) {
+				int flag = 1;
+				setsockopt(res, IPPROTO_TCP, TCP_NODELAY, (void *)&flag, sizeof(flag));
+			}
 			return res;
 		}
 		SOCK_CLOSE(res);
@@ -43,8 +47,8 @@ static oeso_socket_t get_fd(const char *ip, int port) {
 	return INVALID_SOCKET;
 }
 
-int oeso_client_init(oeso_clt_ctx_t *ctx, const char *ip, int port) {
-	oeso_socket_t fd = get_fd(ip, port);
+int oeso_client_init(oeso_clt_ctx_t *ctx, const char *ip, int port, uint8_t flags) {
+	oeso_socket_t fd = get_fd(ip, port, flags);
 	if (fd == INVALID_SOCKET)
 		return 1;
 	ctx->fd = fd;

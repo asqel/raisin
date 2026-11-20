@@ -2,7 +2,7 @@
 
 static int init_fd(oeso_srv_ctx_t *ctx, int port);
 
-int oeso_server_init(oeso_srv_ctx_t *ctx, int port) {
+int oeso_server_init(oeso_srv_ctx_t *ctx, int port, uint8_t flags) {
 	if (!ctx)
 		return -1;
 	if (init_fd(ctx, port))
@@ -10,6 +10,7 @@ int oeso_server_init(oeso_srv_ctx_t *ctx, int port) {
 	ctx->clients_len = 0;
 	ctx->clients = NULL;
 	ctx->clients_capacity = 0;
+	ctx->flags = flags;
 	return 0;
 }
 

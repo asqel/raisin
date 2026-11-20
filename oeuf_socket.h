@@ -21,6 +21,7 @@
 	#include <unistd.h>
 	#include <stddef.h>
 	#include <errno.h>
+	#include <netinet/tcp.h>
 
 	typedef int oeso_socket_t;
 	#undef INVALID_SOCKET
@@ -34,6 +35,8 @@
 
 typedef struct oeso_srv_clt_t oeso_srv_clt_t;
 typedef struct oeso_srv_ctx_t oeso_srv_ctx_t;
+
+#define OESO_FLAG_NODELAY (1 << 0)
 
 struct oeso_srv_clt_t {
 	oeso_socket_t fd;
@@ -58,15 +61,16 @@ struct oeso_srv_ctx_t {
 	size_t clients_capacity;
 
 	void *data;
+	uint8_t flags;
 };
 
 // server side
-int oeso_server_init(oeso_srv_ctx_t *ctx, int port);
+int oeso_server_init(oeso_srv_ctx_t *ctx, int port, uint8_t flags);
 void oeso_server_update(oeso_srv_ctx_t *ctx);
 void oeso_server_remove(oeso_srv_ctx_t *ctx, oeso_srv_clt_t *clt);
 // return < 0 if connection ended ( == 0 if full for now)
 ssize_t oeso_server_send(oeso_srv_ctx_t *ctx, oeso_srv_clt_t *clt, void *buf, size_t len);
-// can call ctx->on_send_ready
+// can call ctx->on_send_ready, if at_least_ms == -1 then wait infinitely and return at any event
 void oeso_server_wait(oeso_srv_ctx_t *ctx, int at_least_ms);
 void oeso_server_exit(oeso_srv_ctx_t *ctx);
 
@@ -86,7 +90,7 @@ struct oeso_clt_ctx_t {
 };
 
 // client side
-int oeso_client_init(oeso_clt_ctx_t *ctx, const char *ip, int port);
+int oeso_client_init(oeso_clt_ctx_t *ctx, const char *ip, int port, uint8_t flags);
 void oeso_client_update(oeso_clt_ctx_t *ctx);
 ssize_t oeso_client_send(oeso_clt_ctx_t *ctx, void *buf, size_t len);
 // can call ctx->on_send_ready
