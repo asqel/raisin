@@ -3,8 +3,8 @@ OBJ = $(SRC:.c=.o)
 OBJ := $(OBJ:src/%=%)
 OBJ := $(addprefix obj/linux/, $(OBJ))
 
-NAME_A = liboeso.a
-NAME_SO = liboeso.so
+NAME_A = libra.a
+NAME_SO = libra.so
 
 CC = gcc
 LD = $(CC)

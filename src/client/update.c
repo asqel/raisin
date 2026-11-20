@@ -1,6 +1,6 @@
 #include "oeuf_socket.h"
 
-void oeso_client_update(oeso_clt_ctx_t *ctx) {
+void ra_client_update(ra_clt_ctx_t *ctx) {
 	while (ctx->fd != INVALID_SOCKET) {
 		uint8_t buffer[4096 * 2];
 		int ret = recv(ctx->fd, (void *)buffer, sizeof(buffer), 0);

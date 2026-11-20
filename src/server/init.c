@@ -1,8 +1,8 @@
 #include "oeuf_socket.h"
 
-static int init_fd(oeso_srv_ctx_t *ctx, int port);
+static int init_fd(ra_srv_ctx_t *ctx, int port);
 
-int oeso_server_init(oeso_srv_ctx_t *ctx, int port) {
+int ra_server_init(ra_srv_ctx_t *ctx, int port) {
 	if (!ctx)
 		return -1;
 	if (init_fd(ctx, port))
@@ -14,8 +14,8 @@ int oeso_server_init(oeso_srv_ctx_t *ctx, int port) {
 }
 
 #if defined(_WIN32) || defined(__linux__)
-static int init_fd(oeso_srv_ctx_t *ctx, int port) {
-	oeso_socket_t fd = socket(AF_INET, SOCK_STREAM, 0);
+static int init_fd(ra_srv_ctx_t *ctx, int port) {
+	ra_socket_t fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (fd == INVALID_SOCKET)
 		goto err;
 
@@ -30,7 +30,7 @@ static int init_fd(oeso_srv_ctx_t *ctx, int port) {
 	if (listen(fd, 256) < 0)
 		goto err;
 
-	if (_oeso_set_nonblock(fd))
+	if (_ra_set_nonblock(fd))
 		goto err;
 
 	ctx->fd = fd;
