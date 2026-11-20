@@ -1,6 +1,6 @@
-#include "oeuf_socket.h"
+#include "raisin.h"
 
-ssize_t oeso_client_send(oeso_clt_ctx_t *ctx, void *buf, size_t len) {
+ssize_t ra_client_send(ra_clt_ctx_t *ctx, void *buf, size_t len) {
 	if (ctx->fd == INVALID_SOCKET)
 		return -1;
 	ssize_t ret = send(ctx->fd, (void *)buf, len, 0);

@@ -1,10 +1,10 @@
-#include "oeuf_socket.h"
+#include "raisin.h"
 #if !defined(_WIN32)
 #include <arpa/inet.h>
 #endif
 
-static oeso_socket_t get_fd(const char *ip, int port, uint8_t flags) {
-	oeso_socket_t res = INVALID_SOCKET;
+static ra_socket_t get_fd(const char *ip, int port, uint8_t flags) {
+	ra_socket_t res = INVALID_SOCKET;
 	struct addrinfo hints = {0};
 	struct addrinfo *info = {0};
 
@@ -17,7 +17,7 @@ static oeso_socket_t get_fd(const char *ip, int port, uint8_t flags) {
 		res = socket(AF_INET, SOCK_STREAM, 0);
 		if (res == INVALID_SOCKET)
 			continue;
-		if (_oeso_set_nonblock(res)) {
+		if (_ra_set_nonblock(res)) {
 			SOCK_CLOSE(res);
 			continue;
 		}
@@ -47,8 +47,8 @@ static oeso_socket_t get_fd(const char *ip, int port, uint8_t flags) {
 	return INVALID_SOCKET;
 }
 
-int oeso_client_init(oeso_clt_ctx_t *ctx, const char *ip, int port, uint8_t flags) {
-	oeso_socket_t fd = get_fd(ip, port, flags);
+int ra_client_init(ra_clt_ctx_t *ctx, const char *ip, int port, uint8_t flags) {
+	ra_socket_t fd = get_fd(ip, port);
 	if (fd == INVALID_SOCKET)
 		return 1;
 	ctx->fd = fd;

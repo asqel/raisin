@@ -1,13 +1,13 @@
-#include "oeuf_socket.h"
+#include "raisin.h"
 
-void oeso_server_exit(oeso_srv_ctx_t *ctx) {
+void ra_server_exit(ra_srv_ctx_t *ctx) {
 	if (ctx->fd != INVALID_SOCKET) {
 		SOCK_CLOSE(ctx->fd);
 		ctx->fd = INVALID_SOCKET;
 	}
 	for (size_t i = 0; i < ctx->clients_len; i++) {
-		oeso_srv_clt_t *clt = &ctx->clients[i];
-		oeso_server_remove(ctx, clt);
+		ra_srv_clt_t *clt = &ctx->clients[i];
+		ra_server_remove(ctx, clt);
 	}
 	free(ctx->clients);
 	ctx->clients = NULL;

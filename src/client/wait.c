@@ -1,7 +1,7 @@
-#include "oeuf_socket.h"
+#include "raisin.h"
 #include <stdio.h>
 
-static void check_connect(oeso_clt_ctx_t *ctx) {
+static void check_connect(ra_clt_ctx_t *ctx) {
 	int error = 0;
 	#if defined(_WIN32)
 		int len = sizeof(int);
@@ -18,7 +18,7 @@ static void check_connect(oeso_clt_ctx_t *ctx) {
 	}
 }
 
-static void wait_events(int64_t timeout, oeso_clt_ctx_t *ctx) {
+static void wait_events(int64_t timeout, ra_clt_ctx_t *ctx) {
 	#if defined(_WIN32)
 		WSAPOLLFD fds = {0};
 	#else
@@ -50,7 +50,7 @@ static void wait_events(int64_t timeout, oeso_clt_ctx_t *ctx) {
 	if (((fds.revents & POLLOUT) || (fds.revents & POLLERR) || (fds.revents & POLLHUP)) && !ctx->is_connected)
 		check_connect(ctx);
 	if (fds.revents & POLLIN) 
-		oeso_client_update(ctx);
+		ra_client_update(ctx);
 }
 
 #if defined(_WIN32)
@@ -67,19 +67,19 @@ void usleep(int64_t usec) {
 
 #endif
 
-void oeso_client_wait(oeso_clt_ctx_t *ctx, int at_least_ms) {
-	int64_t end = _oeso_time_ms() + at_least_ms;
-	while (at_least_ms < 0 || _oeso_time_ms() < end) {
+void ra_client_wait(ra_clt_ctx_t *ctx, int at_least_ms) {
+	int64_t end = _ra_time_ms() + at_least_ms;
+	while (at_least_ms < 0 || _ra_time_ms() < end) {
 		if (at_least_ms < 0)
 			wait_events(-1, ctx);
 		else if (ctx->fd != INVALID_SOCKET) {
-			int64_t timeout = end - _oeso_time_ms();
+			int64_t timeout = end - _ra_time_ms();
 			if (timeout < 0)
 				break;
 			wait_events(timeout, ctx);
 		}
 		else {
-			int64_t timeout = end - _oeso_time_ms();
+			int64_t timeout = end - _ra_time_ms();
 			usleep(timeout * 1000);
 		}
 	}

@@ -3,8 +3,8 @@ OBJ = $(SRC:.c=.o)
 OBJ := $(OBJ:src/%=%)
 OBJ := $(addprefix obj/win/, $(OBJ))
 
-NAME_A = liboeso.win.a
-NAME_SO = liboeso.dll
+NAME_A = libra.win.a
+NAME_SO = libra.dll
 
 CC = x86_64-w64-mingw32-gcc
 LD = $(CC)

@@ -1,6 +1,6 @@
-#include "oeuf_socket.h"
+#include "raisin.h"
 
-void oeso_exit() {
+void ra_exit() {
 	#if defined(_WIN32)
 		WSACleanup();
 	#endif

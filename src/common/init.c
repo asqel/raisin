@@ -1,6 +1,6 @@
-#include "oeuf_socket.h"
+#include "raisin.h"
 
-int oeso_init() {
+int ra_init() {
 	#if defined(_WIN32)
 		WSADATA wsa;
 		if (WSAStartup(MAKEWORD(2,2), &wsa) != 0)

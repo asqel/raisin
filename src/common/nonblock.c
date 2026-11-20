@@ -1,7 +1,7 @@
-#include "oeuf_socket.h"
+#include "raisin.h"
 
 #if defined(_WIN32)
-int _oeso_set_nonblock(oeso_socket_t fd) {
+int _ra_set_nonblock(ra_socket_t fd) {
 	u_long mode = 1;
 	if (ioctlsocket(fd,  FIONBIO, &mode))
 		return -1;
@@ -9,7 +9,7 @@ int _oeso_set_nonblock(oeso_socket_t fd) {
 }
 
 #elif defined(__linux__)
-int _oeso_set_nonblock(oeso_socket_t fd) {
+int _ra_set_nonblock(ra_socket_t fd) {
 	int flags = fcntl(fd, F_GETFL);
 	if (flags == -1)
 		return -1;
