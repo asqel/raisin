@@ -55,8 +55,10 @@ static int wait_events(int64_t timeout, ra_srv_ctx_t *ctx) {
 void ra_server_wait(ra_srv_ctx_t *ctx, int at_least_ms) {
 	int64_t end = _ra_time_ms() + at_least_ms;
 	while (at_least_ms < 0 || _ra_time_ms() < end) {
-		if (at_least_ms < 0)
+		if (at_least_ms < 0) {
 			wait_events(-1, ctx);
+			break;
+		}
 		else {
 			int64_t timeout = end - _ra_time_ms();
 			if (timeout < 0)

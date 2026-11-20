@@ -29,6 +29,10 @@ void _ra_check_accept(ra_srv_ctx_t *ctx) {
 		goto err;
 	if (add_space(ctx))
 		goto err;
+	if (ctx->flags & OESO_FLAG_NODELAY) {
+		int flag = 1;
+		setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (void *)&flag, sizeof(flag));
+	}
 	ctx->clients[ctx->clients_len].addr = addr;
 	ctx->clients[ctx->clients_len].addr_len = addr_len;
 	ctx->clients[ctx->clients_len].fd = fd;

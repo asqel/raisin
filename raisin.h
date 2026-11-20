@@ -21,6 +21,7 @@
 	#include <unistd.h>
 	#include <stddef.h>
 	#include <errno.h>
+	#include <netinet/tcp.h>
 
 	typedef int ra_socket_t;
 	#undef INVALID_SOCKET
@@ -35,6 +36,8 @@
 typedef struct ra_srv_clt_t ra_srv_clt_t;
 typedef struct ra_srv_ctx_t ra_srv_ctx_t;
 
+#define OESO_FLAG_NODELAY (1 << 0)
+
 struct ra_srv_clt_t {
 	ra_socket_t fd;
 
@@ -42,6 +45,7 @@ struct ra_srv_clt_t {
 	socklen_t addr_len;
 
 	void *data;
+	uint8_t flags;
 };
 
 struct ra_srv_ctx_t {
@@ -61,7 +65,7 @@ struct ra_srv_ctx_t {
 };
 
 // server side
-int ra_server_init(ra_srv_ctx_t *ctx, int port);
+int ra_server_init(ra_srv_ctx_t *ctx, int port, uint8_t flags);
 void ra_server_update(ra_srv_ctx_t *ctx);
 void ra_server_remove(ra_srv_ctx_t *ctx, ra_srv_clt_t *clt);
 // return < 0 if connection ended ( == 0 if full for now)
@@ -86,7 +90,7 @@ struct ra_clt_ctx_t {
 };
 
 // client side
-int ra_client_init(ra_clt_ctx_t *ctx, const char *ip, int port);
+int ra_client_init(ra_clt_ctx_t *ctx, const char *ip, int port, uint8_t flags);
 void ra_client_update(ra_clt_ctx_t *ctx);
 ssize_t ra_client_send(ra_clt_ctx_t *ctx, void *buf, size_t len);
 // can call ctx->on_send_ready
