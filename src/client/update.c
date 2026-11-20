@@ -24,7 +24,7 @@ void ra_client_update(ra_clt_ctx_t *ctx) {
 				#error "Unsupported OS " __LINE__ " file " __FILE__
 			#endif
 			if (is_fine)
-				continue;
+				break;
 			ctx->on_disconnect(ctx, 0);
 			SOCK_CLOSE(ctx->fd);
 			ctx->fd = INVALID_SOCKET;

@@ -1,4 +1,5 @@
 #include "oeuf_socket.h"
+#include <stdio.h>
 
 static void check_connect(ra_clt_ctx_t *ctx) {
 	int error = 0;
@@ -29,8 +30,12 @@ static void wait_events(int64_t timeout, ra_clt_ctx_t *ctx) {
 	fds.events = POLLIN;
 	if (ctx->need_send || !ctx->is_connected)
 		fds.events |= POLLOUT;
-	if (!ctx->is_connected)
-		fds.events |= POLLERR | POLLHUP;
+	if (!ctx->is_connected) {
+		#ifndef _WIN32
+		fds.events |= POLLERR;
+		fds.events |= POLLHUP;
+		#endif
+	}
 	
 	#if defined(_WIN32)
 		int ret = WSAPoll(&fds, 1, timeout);
@@ -39,6 +44,7 @@ static void wait_events(int64_t timeout, ra_clt_ctx_t *ctx) {
 	#endif
 	if (ret <= 0)
 		return ;
+
 	if ((fds.revents & POLLOUT) && ctx->need_send)
 		ctx->on_send_ready(ctx);
 	if (((fds.revents & POLLOUT) || (fds.revents & POLLERR) || (fds.revents & POLLHUP)) && !ctx->is_connected)
